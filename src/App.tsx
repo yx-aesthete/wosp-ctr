@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import './App.css';
 
@@ -7,6 +7,14 @@ const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vROeMM8oMlZ6rGkQ
 function App() {
   const [dataHistory, setDataHistory] = useState<string[][][]>([]);
   const [lastDataUpdate, setLastDataUpdate] = useState<string>('');
+
+  const isDataEqual = useCallback((data1: string[][], data2: string[][]) => {
+    return JSON.stringify(data1) === JSON.stringify(data2);
+  }, []);
+
+  const isDataInHistory = useCallback((data: string[][], history: string[][][]) => {
+    return history.some(historicalData => isDataEqual(data, historicalData));
+  }, [isDataEqual]);
 
   useEffect(() => {
     const fetchCSVData = async () => {
@@ -27,29 +35,18 @@ function App() {
     const intervalId = setInterval(fetchCSVData, 10000); // Fetch every 10 seconds
 
     return () => clearInterval(intervalId);
-  }, [dataHistory]); // Dependency on dataHistory and isDataInHistory
+  }, [dataHistory, isDataInHistory]); // Include isDataInHistory here
 
   const parseCSV = (csvText: string): string[][] => {
     const rows = csvText.split(/\r?\n/);
     return rows.slice(1).map(row => row.split(','));
   };
 
-  const isDataInHistory = (data: string[][], history: string[][][]) => {
-    return history.some(historicalData => isDataEqual(data, historicalData));
-  };
-
-  const isDataEqual = (data1: string[][], data2: string[][]) => {
-    return JSON.stringify(data1) === JSON.stringify(data2);
-  };
-
   const getLastUniqueData = () => {
     return dataHistory[dataHistory.length - 1] || [];
   };
 
-  console.log('dataHistory:', dataHistory);
-
   const lastUniqueData = getLastUniqueData();
-  console.log('lastUniqueData:', lastUniqueData);
 
   return (
     <div className="App">
@@ -59,7 +56,7 @@ function App() {
       <div className={"text text-left-column country"}>{lastUniqueData[0]?.[1] || ''}</div>
 
       <div className="sponsors">
-      <img loading="lazy" src={require('./assets/sponsors-logos.gif')} alt="Sponsorzy" className="sponsors-logos" />
+        <img loading="lazy" src={require('./assets/sponsors-logos.gif')} alt="Sponsorzy" className="sponsors-logos" />
       </div>
     </div>
   );
