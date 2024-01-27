@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
@@ -28,7 +27,7 @@ function App() {
     const intervalId = setInterval(fetchCSVData, 10000); // Fetch every 10 seconds
 
     return () => clearInterval(intervalId);
-  }, [dataHistory]); // Dependency on dataHistory
+  }, [dataHistory]); // Dependency on dataHistory and isDataInHistory
 
   const parseCSV = (csvText: string): string[][] => {
     const rows = csvText.split(/\r?\n/);
