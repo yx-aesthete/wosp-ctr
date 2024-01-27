@@ -27,6 +27,7 @@ function App() {
     const intervalId = setInterval(fetchCSVData, 10000); // Fetch every 10 seconds
 
     return () => clearInterval(intervalId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataHistory]); // Dependency on dataHistory
 
   const parseCSV = (csvText: string): string[][] => {
