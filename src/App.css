@@ -1,5 +1,17 @@
+body {
+  background-image: url("./assets/bg-2024.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
 .App {
   text-align: center;
+  background-image: url("./assets/bg-2024.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .App-logo {

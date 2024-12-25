@@ -1,12 +1,17 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import './App.css';
+import Confetti from 'react-confetti';
+import { gsap } from 'gsap';
 
 const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vROeMM8oMlZ6rGkQMRCL4bWiVYDfxxo9QYOPca9WZTUF_idwTQ0gMTScgoTa1HOUnPT6USpJ1DU7hyK/pub?gid=0&single=true&output=csv';
 
 function App() {
   const [dataHistory, setDataHistory] = useState<string[][][]>([]);
   const [lastDataUpdate, setLastDataUpdate] = useState<string>('');
+  const [showConfetti, setShowConfetti] = useState(false);
+  const confettiRef = useRef<HTMLDivElement | null>(null);
+  const staffRef = useRef<HTMLDivElement | null>(null);
 
   const isDataEqual = useCallback((data1: string[][], data2: string[][]) => {
     return JSON.stringify(data1) === JSON.stringify(data2);
@@ -25,6 +30,16 @@ function App() {
         if (!isDataInHistory(newData, dataHistory)) {
           setDataHistory(prevHistory => [...prevHistory, newData]);
           setLastDataUpdate(new Date().toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' }));
+          setShowConfetti(true); // Trigger confetti on new data
+
+          // Animate the staff text
+          if (staffRef.current) {
+            gsap.fromTo(
+              staffRef.current,
+              { scale: 1, color: '#000' },
+              { scale: 1.4, color: '#e11915', duration: 2, yoyo: true, repeat: 3 }
+            );
+          }
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -46,12 +61,31 @@ function App() {
     return dataHistory[dataHistory.length - 1] || [];
   };
 
-  const lastUniqueData = getLastUniqueData();
+  const lastUniqueData = getLastUniqueData().map(row => row.map(cell => cell.replace('"', '') + " zł"));
+
+  // Automatically stop confetti after a short duration
+  useEffect(() => {
+    if (showConfetti) {
+      const timer = setTimeout(() => {
+        if (confettiRef.current) {
+          gsap.to(confettiRef.current, { opacity: 0, duration: 2, onComplete: () => setShowConfetti(false) });
+        }
+      }, 6000); // Start fade out after 6 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [showConfetti]);
 
   return (
     <div className="App">
+      {showConfetti && (
+        <div ref={confettiRef}>
+          <Confetti width={window.innerWidth} height={window.innerHeight} />
+        </div>
+      )}
       <div className={"text hour-state"}>{lastDataUpdate || 'No update yet'}</div>
-      <div className={"text text-left-column staff"}>{lastUniqueData[2]?.[1] || ''}</div>
+      <div className={"text text-left-column staff"} ref={staffRef}>
+        {lastUniqueData[2]?.[1] || ''}
+      </div>
       <div className={"text text-left-column city"}>{lastUniqueData[1]?.[1] || ''}</div>
       <div className={"text text-left-column country"}>{lastUniqueData[0]?.[1] || ''}</div>
 

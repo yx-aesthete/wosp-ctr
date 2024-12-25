@@ -1,73 +1,71 @@
 body {
   /* set background image from local folder */
-    background-image:  url('./assets/bg-2024.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    /* set font family to anton */
-    font-family: 'Anton', sans-serif;
-    font-weight: 700;
+  background-image: url("./assets/bg-2024.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* set font family to anton */
+  font-family: "Anton", sans-serif;
+  font-weight: 700;
   /* all font serttings */
-    font-size: 2rem;
-    line-height: 1.5;
-    /* shadow */
-    text-shadow: 0 0 3px rgba(0, 3, 3, 0.5);
-    letter-spacing: 1px;
-  
-  }
-  
-  code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-      monospace;
-  }
-  
-  
-  .text {
-    position: absolute;
-    font-size: min(5vw, 120px);
-    right: 31.5%;
-  }
-  
-  .hour-state {
-    left: 48.9%;
-    top: 15.3%;
-  
-    font-size: min(3vw, 58px);
-    white-space: nowrap;
-  }
-  
-  .staff {
-    top: 36%;
-  }
-  
-  .city {
-    top: 59%;
-  }
-  
-  .country {
-    top: 82%;
-  }
-  
-  .sponsors {
-    display: inline-block;
-    box-sizing: content-box;
-    background: white;
-  
-    position: absolute;
-    box-shadow: 21px 14px 31px -21px rgb(0 0 0);
-    border-radius: 6%;
-    right: 2%;
-    padding: 11.6%;
-    bottom: 51px;
-  }
-  
-  .sponsors-bg {
-    width: 100%;
-  }
-   
-  .sponsors-logos {
-    position: absolute;
-    left: 50%;
-    top: 46%;
-    transform: translate(-50%, -50%);
-    width: 74%;
-  }
+  font-size: 2rem;
+  line-height: 1.5;
+  /* shadow */
+  text-shadow: 0 0 3px rgba(0, 3, 3, 0.5);
+  letter-spacing: 1px;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.text {
+  position: absolute;
+  font-size: min(5vw, 120px);
+  right: 31.5%;
+}
+
+.hour-state {
+  left: 48.9%;
+  top: 15.3%;
+
+  font-size: min(3vw, 58px);
+  white-space: nowrap;
+}
+
+.staff {
+  top: 36%;
+}
+
+.city {
+  top: 59%;
+}
+
+.country {
+  top: 82%;
+}
+
+.sponsors {
+  display: inline-block;
+  box-sizing: content-box;
+  background: white;
+
+  position: absolute;
+  box-shadow: 21px 14px 31px -21px rgb(0 0 0);
+  border-radius: 6%;
+  right: 2%;
+  padding: 11.6%;
+  bottom: 44px;
+}
+
+.sponsors-bg {
+  width: 100%;
+}
+
+.sponsors-logos {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 84%;
+}
