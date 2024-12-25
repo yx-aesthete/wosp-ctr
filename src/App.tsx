@@ -12,6 +12,12 @@ function App() {
   const [showConfetti, setShowConfetti] = useState(false);
   const confettiRef = useRef<HTMLDivElement | null>(null);
   const staffRef = useRef<HTMLDivElement | null>(null);
+  const cityRef = useRef<HTMLDivElement | null>(null);
+  const countryRef = useRef<HTMLDivElement | null>(null);
+
+  const [prevStaff, setPrevStaff] = useState<string>('');
+  const [prevCity, setPrevCity] = useState<string>('');
+  const [prevCountry, setPrevCountry] = useState<string>('');
 
   const isDataEqual = useCallback((data1: string[][], data2: string[][]) => {
     return JSON.stringify(data1) === JSON.stringify(data2);
@@ -32,13 +38,35 @@ function App() {
           setLastDataUpdate(new Date().toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' }));
           setShowConfetti(true); // Trigger confetti on new data
 
-          // Animate the staff text
-          if (staffRef.current) {
+          const newStaff = newData[2]?.[1] || '';
+          const newCity = newData[1]?.[1] || '';
+          const newCountry = newData[0]?.[1] || '';
+
+          if (newStaff !== prevStaff && staffRef.current) {
             gsap.fromTo(
               staffRef.current,
               { scale: 1, color: '#000' },
-              { scale: 1.4, color: '#e11915', duration: 2, yoyo: true, repeat: 3 }
+              { scale: 1.2, color: '#e11915', duration: 2, yoyo: true, repeat: 3 }
             );
+            setPrevStaff(newStaff);
+          }
+
+          if (newCity !== prevCity && cityRef.current) {
+            gsap.fromTo(
+              cityRef.current,
+              { scale: 1, color: '#000' },
+              { scale: 1.2, color: '#e11915', duration: 2, yoyo: true, repeat: 3 }
+            );
+            setPrevCity(newCity);
+          }
+
+          if (newCountry !== prevCountry && countryRef.current) {
+            gsap.fromTo(
+              countryRef.current,
+              { scale: 1, color: '#000' },
+              { scale: 1.2, color: '#e11915', duration: 2, yoyo: true, repeat: 3 }
+            );
+            setPrevCountry(newCountry);
           }
         }
       } catch (error) {
@@ -50,7 +78,7 @@ function App() {
     const intervalId = setInterval(fetchCSVData, 10000); // Fetch every 10 seconds
 
     return () => clearInterval(intervalId);
-  }, [dataHistory, isDataInHistory]); // Include isDataInHistory here
+  }, [dataHistory, isDataInHistory, prevStaff, prevCity, prevCountry]); // Include previous values in dependencies
 
   const parseCSV = (csvText: string): string[][] => {
     const rows = csvText.split(/\r?\n/);
@@ -86,8 +114,12 @@ function App() {
       <div className={"text text-left-column staff"} ref={staffRef}>
         {lastUniqueData[2]?.[1] || ''}
       </div>
-      <div className={"text text-left-column city"}>{lastUniqueData[1]?.[1] || ''}</div>
-      <div className={"text text-left-column country"}>{lastUniqueData[0]?.[1] || ''}</div>
+      <div className={"text text-left-column city"} ref={cityRef}>
+        {lastUniqueData[1]?.[1] || ''}
+      </div>
+      <div className={"text text-left-column country"} ref={countryRef}>
+        {lastUniqueData[0]?.[1] || ''}
+      </div>
 
       <div className="sponsors">
         <img loading="lazy" src={require('./assets/sponsors-logos.gif')} alt="Sponsorzy" className="sponsors-logos" />
